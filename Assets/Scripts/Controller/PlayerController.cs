@@ -1,12 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField]
-    float _speed = 10.0f;
-        
+    PlayerStat _stat;
     Vector3 _destPos;
 
     public enum PlayerState
@@ -14,18 +13,18 @@ public class PlayerController : MonoBehaviour
         Die,
         Moving,
         Idle,
+        Skill
     }
     PlayerState _state = PlayerState.Idle;
     void Start()
     {
-        // 키보드 이제 사용안할거임
-        //Managers.Input.KeyAction -= OnKeyboard;
-        //Managers.Input.KeyAction += OnKeyboard;
+        _stat = gameObject.GetComponent<PlayerStat>();
+
         Managers.Input.MouseAction -= OnMouseClicked;
         Managers.Input.MouseAction += OnMouseClicked;
-        
+
     }
-  
+
 
 
     void Update()
@@ -50,7 +49,7 @@ public class PlayerController : MonoBehaviour
     }
     void UpdateIdle()
     {
-        
+
         Animator anim = GetComponent<Animator>();
         anim.SetFloat("speed", 0);
 
@@ -58,24 +57,30 @@ public class PlayerController : MonoBehaviour
     void UpdateRun()
     {
         Vector3 dir = _destPos - transform.position;
-        if (dir.magnitude < 0.0001f)
+        if (dir.magnitude < 0.1f)
         {
             _state = PlayerState.Idle;
         }
         else
         {
-            float moveDist = Mathf.Clamp(_speed * Time.deltaTime, 0, dir.magnitude);
-            transform.position += dir.normalized * moveDist;
+            NavMeshAgent nma = gameObject.GetComponent<NavMeshAgent>();
+
+            float moveDist = Mathf.Clamp(_stat.MoveSpeed * Time.deltaTime, 0, dir.magnitude);
+            nma.Move(dir.normalized * moveDist);
+            if (Physics.Raycast(transform.position, dir, 1.0f, LayerMask.GetMask("Block")))
+            {
+                _state = PlayerState.Idle;
+                return;
+            }
 
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dir), 10.0f * Time.deltaTime);
 
-            //  transform.LookAt(_destPos);
         }
 
-        
+
         Animator anim = GetComponent<Animator>();
-        anim.SetFloat("speed", _speed);
-        
+        anim.SetFloat("speed", _stat.MoveSpeed);
+
     }
 
     void Touch(string a)
@@ -110,7 +115,7 @@ public class PlayerController : MonoBehaviour
     //    }
     //    _moveToDest = false;
     //}
-
+    int _mask = (1 << (int)Define.Layer.Monster) | (1 << (int)Define.Layer.Ground);
     void OnMouseClicked(Define.MouseEvent evt)
     {
         //if (evt != Define.MouseEvent.Click) // 마우스 클릭을 뗏을 때 적용됨
@@ -119,12 +124,21 @@ public class PlayerController : MonoBehaviour
 
         RaycastHit hit;
         //int mask = (1 << 6) | (1 << 7);
-        LayerMask mask = LayerMask.GetMask("Wall");
+        //LayerMask mask = LayerMask.GetMask("Wall");
 
-        if (Physics.Raycast(ray, out hit, 100.0f, mask))
+        if (Physics.Raycast(ray, out hit, 100.0f, _mask))
         {
-            _destPos = hit.point; 
+            _destPos = hit.point;
             _state = PlayerState.Moving;
+
+            if(hit.collider.gameObject.layer == (int)Define.Layer.Monster)
+            {
+                Debug.Log("@@Monster@@");
+            }
+            else
+            {
+                Debug.Log("@@Ground@@");
+            }
         }
     }
 }

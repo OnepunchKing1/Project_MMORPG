@@ -12,7 +12,7 @@ public class GameScene : BaseScene
         _SceneType = Define.Scene.Game;
         Managers.UI.ShowSceneUI<UI_Inven>();
 
-        Dictionary<int, Stat> dict = Managers.Data.StatDict;
+        Dictionary<int, Data.Stat> dict = Managers.Data.StatDict;
                 
     }
   

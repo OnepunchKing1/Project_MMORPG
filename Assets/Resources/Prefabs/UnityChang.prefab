@@ -4156,6 +4156,7 @@ GameObject:
   - component: {fileID: 8984989163000948826}
   - component: {fileID: 1308969994203805742}
   - component: {fileID: 3651444759093674654}
+  - component: {fileID: 4847468629927153}
   m_Layer: 0
   m_Name: UnityChang
   m_TagString: Untagged
@@ -4289,6 +4290,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   IsUsing: 0
+--- !u!114 &4847468629927153
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6995029788459205831}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6908355226d29a4da646bcfcc13173d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _level: 0
+  _hp: 0
+  _maxHp: 0
+  _attack: 0
+  _defense: 0
+  _moveSpeed: 0
+  _exp: 0
+  _gold: 0
 --- !u!1 &6995029788459205833
 GameObject:
   m_ObjectHideFlags: 0
