@@ -13,10 +13,7 @@ public class UI_Inven_Item : UIBase
         ItemNameText
     }
     string _name;
-    void Start()
-    {
-        Init();
-    }
+   
     public override void Init()
     {
         Bind<GameObject>(typeof(Gameobjects));

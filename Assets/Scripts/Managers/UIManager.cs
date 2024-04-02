@@ -37,7 +37,23 @@ public class UIManager
             canvas.sortingOrder = 0;
         }
     }
+    public T MakeWorldSpaceUI<T>(Transform parent = null, string name = null) where T : UIBase
+    {
+        if (string.IsNullOrEmpty(name))
+            name = typeof(T).Name;
 
+        GameObject go = Managers.Resource.Instantiate($"UI/WorldSpace/{name}");
+
+        if (parent != null)
+            go.transform.SetParent(parent);
+
+        Canvas canvas = go.GetOrAddComponent<Canvas>();
+        canvas.renderMode = RenderMode.WorldSpace;
+        canvas.worldCamera = Camera.main;
+
+
+        return go.GetOrAddComponent<T>();
+    }
     public T MakeSubItem<T>(Transform parent = null, string name = null) where T : UIBase
     {
         if (string.IsNullOrEmpty(name))
@@ -45,7 +61,7 @@ public class UIManager
 
         GameObject go = Managers.Resource.Instantiate($"UI/SubItem/{name}");
 
-        if(parent != null)
+        if (parent != null)
         {
             go.transform.SetParent(parent);
         }
@@ -60,7 +76,7 @@ public class UIManager
 
         GameObject go = Managers.Resource.Instantiate($"UI/Scene/{name}");
         T sceneUI = Util.GetOrAddComponent<T>(go);
-        
+
         go.transform.SetParent(Root.transform);
 
 
@@ -74,7 +90,7 @@ public class UIManager
 
         GameObject go = Managers.Resource.Instantiate($"UI/Popup/{name}");
         T popup = Util.GetOrAddComponent<T>(go);
-        _popupStack.Push(popup);      
+        _popupStack.Push(popup);
 
         go.transform.SetParent(Root.transform);
 

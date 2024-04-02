@@ -9,6 +9,11 @@ public abstract class UIBase : MonoBehaviour
 {
     protected Dictionary<Type, UnityEngine.Object[]> _objects = new Dictionary<Type, UnityEngine.Object[]>();
     public abstract void Init();
+
+    private void Start()
+    {
+        Init();
+    }
     protected void Bind<T>(Type type) where T : UnityEngine.Object
     {
         string[] names = Enum.GetNames(type);
