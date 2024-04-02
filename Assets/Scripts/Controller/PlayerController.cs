@@ -13,7 +13,7 @@ public class PlayerController : MonoBehaviour
         Die,
         Moving,
         Idle,
-        Skill
+        Skill // 추가 (치유 스킬, 공격 스킬 등)
     }
     PlayerState _state = PlayerState.Idle;
     void Start()
@@ -67,7 +67,7 @@ public class PlayerController : MonoBehaviour
 
             float moveDist = Mathf.Clamp(_stat.MoveSpeed * Time.deltaTime, 0, dir.magnitude);
             nma.Move(dir.normalized * moveDist);
-            if (Physics.Raycast(transform.position, dir, 1.0f, LayerMask.GetMask("Block")))
+            if (Physics.Raycast(transform.position + Vector3.up * 0.5f, dir, 1.0f, LayerMask.GetMask("Block")))
             {
                 _state = PlayerState.Idle;
                 return;
