@@ -15,5 +15,9 @@ public static class Extension
         UIBase.BindEvent(go, action, type);
     }
 
+    public static bool IsValid(this GameObject go)
+    {
+        return go != null && go.activeSelf;
+    }
 
 }
